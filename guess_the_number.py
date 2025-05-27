@@ -42,6 +42,8 @@ def exit():
 #Начать заново
 
 def restart():
+    global randnum   
+    randnum = random.randint(1, 10)  
     answer = mb.askyesno(title = "Новая игра", message = "Ты действительно хочешь\n        начать заново? ")
     if answer == True:
     	   global count
@@ -95,6 +97,10 @@ def play():
     	text.configure(state = DISABLED)
     	    	
     if n == randnum and n > 0 and n < 11:
+    	attempts.configure(state = NORMAL)
+    	attempts.delete("1.0", END)
+    	attempts.insert("1.0", "     " + str(count))
+    	attempts.configure(state = DISABLED)
     	R.configure(text = "Победа!")
     	text.configure(state = NORMAL)
     	text.delete("1.0", END)
