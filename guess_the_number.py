@@ -9,9 +9,9 @@ randnum = random.randint(1, 10)
 
 #Списки с фразами
 
-list = ['Я загадал совсем другое число!\nПопробуй ещё разочек! :)', 'Нет-нет, мое число меньше!\nПробуй ещё!', 'А вот и не угадал!\nДам подсказку, моё число меньше!', 'Дай подумать...\nНет, моё число другое!', 'Эй, ну куда так много!\nЯ загадал число поменьше!', 'Другое! Вот только не скажу, какое)', 'Нет, я загадал другое число!\nДавай ещё раз!', 'Нетушки! Давай ещё раз!']
+list = ['Я загадал совсем другое число!\nПопробуй ещё разочек! :)', 'Нет-нет, мое число меньше!\nПробуй ещё!', 'А вот и не угадал!\nДам подсказку, моё число меньше!', 'Дай подумать...\nНет, моё число другое!', 'Эй, ну куда так много!\nЯ загадал число поменьше!', 'Другое! Вот только не скажу, какое)', 'Нет, я загадал другое число!\nПопробуй назвать число поменьше!']
 
-list2 = ['А вот и нет! Мое число больше!', 'Маловато будет...\nДавай ещё разок!', 'Нет, мое число другое...\nДавай ещё раз!', 'Нет-нет! Совсем не то!\nПодсказка: мое число больше!', 'Не угадал! Бери число побольше!', 'А вот и не угадал, хи-хи!', 'Давай ещё разочек!', 'Хм-хм...\nНет, мое число больше!']
+list2 = ['А вот и нет! Мое число больше!', 'Маловато будет...\nДавай ещё разок!', 'Нет, мое число другое...\nДавай ещё раз!', 'Нет-нет! Совсем не то!\nПодсказка: мое число больше!', 'Не угадал! Бери число побольше!', 'А вот и не угадал, хи-хи!', 'Давай ещё разочек!\nМое число чуть-чуть больше!', 'Хм-хм...\nНет, мое число больше!']
 
 list3 = ['Ура! Ты угадал!', 'Молодец, ты угадал!', 'Поздравляю, ты победил! =3', 'Угадал!', 'Как ты догадался? Правильно! :)']
 
@@ -33,9 +33,9 @@ def game_rules():
 #Функция выхода
 
 def exit():
-        answer = mb.askyesno( title="Выход", message="Ты правда хочешь выйти?")
+        answer = mb.askyesno( title="Выход", message="Ты действительно хочешь\n         выйти из игры?")
         if answer == True:
-        	window.quit()
+        	root.quit()
         else:
         	pass
 
@@ -47,10 +47,11 @@ def restart():
     answer = mb.askyesno(title = "Новая игра", message = "Ты действительно хочешь\n        начать заново? ")
     if answer == True:
     	   global count
-    	   count = 5    	   
+    	   count = 5
+    	   l3.configure(text="Думаю, ты загадал число:")   	   
     	   attempts.configure(state = NORMAL)
-    	   attempts.delete("1.0", END)
-    	   attempts.insert("1.0", "     5")
+    	   attempts.delete(0, END)
+    	   txt2.set(str(count))
     	   attempts.configure(state = DISABLED)
     	   text.configure(state = NORMAL)
     	   text.delete("1.0", END)
@@ -75,8 +76,8 @@ def play():
     if n > randnum and n > 0 and n < 11:
     	R.configure(text = random.choice(list6))
     	attempts.configure(state = NORMAL)
-    	attempts.delete("1.0", END)
-    	attempts.insert("1.0", "     " + str(count))
+    	attempts.delete(0, END)
+    	txt2.set(str(count))
     	attempts.configure(state = DISABLED)
 
     	text.configure(state = NORMAL)
@@ -87,8 +88,8 @@ def play():
     if n < randnum and n > 0 and n < 11:
     	R.configure(text = random.choice(list6))
     	attempts.configure(state = NORMAL)
-    	attempts.delete("1.0", END)
-    	attempts.insert("1.0", "     " + str(count))
+    	attempts.delete(0, END)
+    	txt2.set(str(count))
     	attempts.configure(state = DISABLED)
 
     	text.configure(state = NORMAL)
@@ -98,35 +99,40 @@ def play():
     	    	
     if n == randnum and n > 0 and n < 11:
     	attempts.configure(state = NORMAL)
-    	attempts.delete("1.0", END)
-    	attempts.insert("1.0", "     " + str(count))
+    	attempts.delete(0, END)
+    	txt2.set(str(count))
     	attempts.configure(state = DISABLED)
     	R.configure(text = "Победа!")
     	text.configure(state = NORMAL)
     	text.delete("1.0", END)
     	text.insert("1.0", random.choice(list3))
     	text.configure(state = DISABLED)
-    	num.configure(state = "readonly")
+    	num.configure(state = "disabled")
     	R.configure(state = DISABLED) 
 
     if count == 0 and n != randnum:  	
             R.configure(text = "Попытки кончились")
             num.delete(0, END)
-            num.configure(state = "readonly")
+            txt.set(str(randnum))
+            l3.configure(text = "Загаданное мной число:")
+            num.configure(state = "disabled")
             text.configure(state = NORMAL)
             text.delete("1.0", END)
-            text.insert("1.0", random.choice(list4))
+            text.insert("1.0", random.choice(list4))               
             text.configure(state = DISABLED)
             R.configure(state = DISABLED) 	  	
 #Графический дизайн 
     	
-window = Tk()
+root = Tk()
+txt = StringVar()
+txt2 = StringVar()
 
 #Меню
 
-menubar = Menu(window)
+menubar = Menu(root)
 
 helpmenu = Menu(menubar, tearoff=0)
+
 menubar.add_cascade(label="Справка", menu=helpmenu)
 
 menubar.add_command(label = "Новая игра", command = restart)
@@ -137,17 +143,17 @@ helpmenu.add_command(label="Инструкция", command=how_to_use)
 
 helpmenu.add_command(label= "Правила игры", command=game_rules)
 
-window.config(menu = menubar)
+root.config(menu = menubar)
 
 #Текстовые надписи
 
-l1 = Label(window, text = "Угадай-ка!")
+l1 = Label(root, text = "Угадай-ка!")
 l1.grid(row = 0, column = 0, padx = 270, pady = 7, sticky = NW)
 
-l2 = Label(window, text="У тебя осталось попыток: ") 
+l2 = Label(root, text="У тебя осталось попыток: ") 
 l2.grid(row = 2, column = 0, sticky = NW, padx = 70, pady = 7)
 
-l3 = Label(window, text="Думаю, ты загадал число:")
+l3 = Label(root, text="Думаю, ты загадал число:")
 l3.grid(row = 3, column = 0, sticky = NW, padx = 70, pady = 7)
 
 #Текстовый виджет
@@ -157,20 +163,21 @@ text.grid(row = 1, column = 0, padx = 70,pady = 5, sticky = NW)
 text.insert("1.0", "Привет! Я загадал число от 1 до 10!\nПопробуешь угадать? :-)")
 text.configure(state = DISABLED)    	
 
-attempts = Text(window, width = 11, height = 1)
-attempts.grid(row = 2, column = 0, sticky = NW, padx = 450, pady = 7)
-attempts.insert("1.0", "     5")
-attempts.configure(state = DISABLED)    
+attempts = Entry(root, width = 10, justify = CENTER, textvariable=txt2)
+attempts.configure(disabledbackground="white", disabledforeground="black", state = DISABLED)
+attempts.grid(row = 2, column = 0, sticky = NW, padx = 460, pady = 7)
+txt2.set(str(count))
 
 #Поле ввода
 
-num = Entry(window, width = 10, justify = CENTER)
-num.grid(row = 3, column = 0, sticky = NW, padx = 457, pady = 7)
+num = Entry(root, width = 10, justify = CENTER, textvariable=txt)
+num.grid(row = 3, column = 0, sticky = NW, padx = 460, pady = 7)
+num.configure(disabledbackground="white", disabledforeground="black")
 num.focus()
 
 #Кнопки
 
-R = Button(window, width = 20, text = "Играть", command = lambda: play())
+R = Button(root, width = 20, text = "Играть", command = lambda: play())
 R.grid(row = 4, column = 0, sticky = NW, padx = 150, pady = 7)
 
-window.mainloop()
+root.mainloop()
