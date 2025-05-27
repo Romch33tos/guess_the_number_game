@@ -51,9 +51,8 @@ def play():
     	text.delete("1.0", END)
     	text.insert("1.0", "Молодец, ты угадал!")
     	text.configure(state = DISABLED)  
-   
     if count == 0:
-    	answer = mb.askyesno(title = "Вопрос", message = "lol", detail = "lal")
+    	answer = mb.askyesno(title = "Вопрос", message = "", detail = "")
     	text.configure(state = NORMAL)
     	text.delete("1.0", END)
     	text.insert("1.0", "Game over")
@@ -84,6 +83,7 @@ attempts = Text(window, width = 11, height = 1)
 attempts.grid(row = 2, column = 0, sticky = NW, padx = 450, pady = 7)
 attempts.insert("1.0", "     5")
 attempts.configure(state = DISABLED)    
+
 #Поле ввода
 
 num = Entry(window, width = 10, justify = CENTER)
