@@ -1,183 +1,215 @@
 import tkinter as tk
-from tkinter import *
 from tkinter import messagebox as mb
 import random
 
-count = 5
+attempts_left = 5
+secret_number = random.randint(1, 10)
 
-randnum = random.randint(1, 10)
+too_high_messages = [
+    'Я загадал совсем другое число!\nПопробуй ещё разочек! :)', 
+    'Нет-нет, мое число меньше!\nПробуй ещё!', 
+    'А вот и не угадал!\nДам подсказку, моё число меньше!', 
+    'Дай подумать...\nНет, моё число другое!', 
+    'Эй, ну куда так много!\nЯ загадал число поменьше!', 
+    'Другое! Вот только не скажу, какое)', 
+    'Нет, я загадал другое число!\nПопробуй назвать число поменьше!'
+]
 
-#Списки с фразами
+too_low_messages = [
+    'А вот и нет! Мое число больше!', 
+    'Маловато будет...\nДавай ещё разок!', 
+    'Нет, мое число другое...\nДавай ещё раз!', 
+    'Нет-нет! Совсем не то!\nПодсказка: мое число больше!', 
+    'Не угадал! Бери число побольше!', 
+    'А вот и не угадал, хи-хи!', 
+    'Давай ещё разочек!\nМое число чуть-чуть больше!', 
+    'Хм-хм...\nНет, мое число больше!'
+]
 
-list = ['Я загадал совсем другое число!\nПопробуй ещё разочек! :)', 'Нет-нет, мое число меньше!\nПробуй ещё!', 'А вот и не угадал!\nДам подсказку, моё число меньше!', 'Дай подумать...\nНет, моё число другое!', 'Эй, ну куда так много!\nЯ загадал число поменьше!', 'Другое! Вот только не скажу, какое)', 'Нет, я загадал другое число!\nПопробуй назвать число поменьше!']
+win_messages = [
+    'Ура! Ты угадал!', 
+    'Молодец, ты угадал!', 
+    'Поздравляю, ты победил! =3', 
+    'Угадал!', 
+    'Как ты догадался? Правильно! :)'
+]
 
-list2 = ['А вот и нет! Мое число больше!', 'Маловато будет...\nДавай ещё разок!', 'Нет, мое число другое...\nДавай ещё раз!', 'Нет-нет! Совсем не то!\nПодсказка: мое число больше!', 'Не угадал! Бери число побольше!', 'А вот и не угадал, хи-хи!', 'Давай ещё разочек!\nМое число чуть-чуть больше!', 'Хм-хм...\nНет, мое число больше!']
+lose_messages = [
+    'Не расстраивайся!\nПовезет в другой раз!', 
+    'Попытки кончились!\nТы проиграл! :(', 
+    'GAME OVER!', 
+    'Игра окончена!', 
+    'Эх, попытки кончились!\nНичего, повезёт в другой раз!'
+]
 
-list3 = ['Ура! Ты угадал!', 'Молодец, ты угадал!', 'Поздравляю, ты победил! =3', 'Угадал!', 'Как ты догадался? Правильно! :)']
+new_game_messages = [
+    'Я загадал новое число!\nУгадай, какое!', 
+    'Погоди секундочку...\nВсё, я загадал новое число!', 
+    'Попробуем ещё раз! Начинай!', 
+    'Сыграем ещё раз! \nЯ загадал новое число!'
+]
 
-list4 = ['Не расстраивайся!\nПовезет в другой раз!', 'Попытки кончились!\nТы проиграл! :(', '                                               GAME OVER!', 'Игра окончена!', 'Эх, попытки кончились!\nНичего, повезёт в другой раз!']
+greeting_messages = [
+    'Привет! Я загадал число от 1 до 10!\nПопробуешь угадать? :-)', 
+    'Привет! Сыграем в угадай-ку?\nЯ уже загадал число!', 
+    'Спорим, не угадаешь, какое число я задумал? :D'
+]
 
-list5 = ['Я загадал новое число!\nУгадай, какое!', 'Погоди секундочку...\nВсё, я загадал новое число!', 'Попробуем ещё раз! Начинай!', 'Сыграем ещё раз! \nЯ загадал новое число!']
+duplicate_messages = [
+    'Уже было!', 
+    'Не, это уже было...',
+    'Давай другое! Это уже было! ;)', 
+    'Было!', 
+    'Ты уже вводил это число! :)', 
+    'Дай подумать… Нет, это уже было!', 
+    'Ну нет же!', 
+    'А вот и нет! :)', 
+    'А вот и не угадал! :D', 
+    'Говорил же, не то!'
+]
 
-list6 = ['Ещё!', 'Сейчас угадаю!', 'Вот сейчас точно угадаю!', 'Ещё разочек!', 'Ещё раз!', 'Угадал?', 'А это?', 'Я угадал?']
+guessed_numbers = []
+duplicate_numbers = []
 
-#Инструкция
+def show_help():
+    mb.showinfo(
+        title="Справка", 
+        message="Инструкция", 
+        detail="1. Введи число от 1 до 10.\n2. Нажми на клавишу Enter.\n3. Используй кнопку «Новая игра»,\nчтобы начать заново."
+    )
 
-def how_to_use(): 
-	answer = mb.showinfo(title = "Справка", message = "Инструкция", detail = "1. Введи число от 1 до 10.\n2. Нажми на кнопку «Играть».\n3. Если у тебя кончатся попытки, ты\nможешь начать заново, но уже с \nдругим числом ;-)\n4. Используй кнопку «Выйти»,\nчтобы закрыть игру.")
+def show_rules():
+    mb.showinfo(
+        title="Справка", 
+        message="Правила игры", 
+        detail="1. Запрещены лишние символы, кроме цифр.\n2. Нельзя вводить числа меньше нуля или больше десяти!"
+    )
 
-#Правила игры
-def game_rules(): 
-	answer = mb.showinfo(title = "Справка", message = "Правила игры", detail = "1. Запрещены лишние символы,\nкроме цифр\n2. Нельзя вводить числа меньше\nнуля или больше десяти!")
+def restart_game():
+    global secret_number
+    secret_number = random.randint(1, 10)
+    answer = mb.askyesno(
+        title="Новая игра", 
+        message="Ты действительно хочешь начать заново?"
+    )
+    if answer:
+        guessed_numbers.clear()
+        duplicate_numbers.clear()
+        global attempts_left
+        attempts_left = 5
+        guess_label.config(text="Думаю, ты загадал число:")
+        attempts_entry.config(state=tk.NORMAL)
+        attempts_entry.delete(0, tk.END)
+        attempts_var.set(str(attempts_left))
+        attempts_entry.config(state=tk.DISABLED)
+        message_text.config(state=tk.NORMAL)
+        message_text.delete("1.0", tk.END)
+        message_text.insert("1.0", random.choice(new_game_messages))
+        message_text.config(state=tk.DISABLED)
+        number_entry.config(state=tk.NORMAL)
+        number_entry.delete(0, tk.END)
+        number_entry.bind('<Return>', on_enter)
+        number_entry.focus()
 
-#Функция выхода
+def check_duplicates():
+    for num in guessed_numbers:
+        if guessed_numbers.count(num) > 1 and num not in duplicate_numbers:
+            duplicate_numbers.append(num)
 
-def exit():
-        answer = mb.askyesno( title="Выход", message="Ты действительно хочешь\n         выйти из игры?")
-        if answer == True:
-        	root.quit()
-        else:
-        	pass
+def play_game():
+    try:
+        guess = int(number_entry.get())
+        number_entry.delete(0, tk.END)
+        if guess <= 0:
+            mb.showerror(title="Ошибка", message="Число должно быть больше 0!")
+            return
+        elif guess > 10:
+            mb.showerror(title="Ошибка", message="Число не может быть больше 10!")
+            return
+        guessed_numbers.append(guess)
+        check_duplicates()
+        global attempts_left
+        if guess not in duplicate_numbers:
+            attempts_left -= 1
+        if guess in duplicate_numbers:
+            message_text.config(state=tk.NORMAL)
+            message_text.delete("1.0", tk.END)
+            message_text.insert("1.0", random.choice(duplicate_messages))
+            message_text.config(state=tk.DISABLED)
+            return
+        if guess > secret_number and 0 < guess < 11:
+            update_ui(attempts_left, random.choice(too_high_messages))
+        elif guess < secret_number and 0 < guess < 11:
+            update_ui(attempts_left, random.choice(too_low_messages))
+        elif guess == secret_number:
+            update_ui(attempts_left, random.choice(win_messages))
+            number_entry.config(state="disabled")
+            number_entry.unbind('<Return>')
+        if attempts_left == 0 and guess != secret_number:
+            number_entry.delete(0, tk.END)
+            number_var.set(str(secret_number))
+            guess_label.config(text="Загаданное мной число:")
+            number_entry.config(state="disabled")
+            message_text.config(state=tk.NORMAL)
+            message_text.delete("1.0", tk.END)
+            message_text.insert("1.0", random.choice(lose_messages))
+            message_text.config(state=tk.DISABLED)
+            number_entry.unbind('<Return>')
+    except ValueError:
+        mb.showerror(
+            title="Ошибка ввода!", 
+            message="Убедись в том, что ты ввёл все данные верно!"
+        )
 
-#Начать заново
+def update_ui(attempts, message):
+    attempts_entry.config(state=tk.NORMAL)
+    attempts_entry.delete(0, tk.END)
+    attempts_var.set(str(attempts))
+    attempts_entry.config(state=tk.DISABLED)
+    message_text.config(state=tk.NORMAL)
+    message_text.delete("1.0", tk.END)
+    message_text.insert("1.0", message)
+    message_text.config(state=tk.DISABLED)
 
-def restart():
-    global randnum   
-    randnum = random.randint(1, 10)  
-    answer = mb.askyesno(title = "Новая игра", message = "Ты действительно хочешь\n        начать заново? ")
-    if answer == True:
-    	   global count
-    	   count = 5
-    	   l3.configure(text="Думаю, ты загадал число:")   	   
-    	   attempts.configure(state = NORMAL)
-    	   attempts.delete(0, END)
-    	   txt2.set(str(count))
-    	   attempts.configure(state = DISABLED)
-    	   text.configure(state = NORMAL)
-    	   text.delete("1.0", END)
-    	   text.insert("1.0", random.choice(list5))
-    	   text.configure(state = DISABLED)
-    	   num.configure(state = NORMAL)
-    	   num.delete(0, END)
-    	   R.configure(state = NORMAL, text = random.choice(list6))
-    
-#Игра
+def on_enter(event):
+    play_game()
 
-def play():
-    n = int(num.get())
-    if n <= 0:
-        answer = mb.showerror(title = "Ошибка", message = "Число должно быть больше 0!")
-    elif n > 10:
-        answer = mb.showerror(title = "Ошибка", message = "Число не может быть больше 10!")   
-    else:
-        global count
-        count = count - 1
-      
-    if n > randnum and n > 0 and n < 11:
-    	R.configure(text = random.choice(list6))
-    	attempts.configure(state = NORMAL)
-    	attempts.delete(0, END)
-    	txt2.set(str(count))
-    	attempts.configure(state = DISABLED)
+root = tk.Tk()
+root.title("Угадай-ка!")
+root.geometry("305x130")
+root.resizable(width=False, height=False)
 
-    	text.configure(state = NORMAL)
-    	text.delete("1.0", END)
-    	text.insert("1.0", random.choice(list))
-    	text.configure(state = DISABLED)
-    	
-    if n < randnum and n > 0 and n < 11:
-    	R.configure(text = random.choice(list6))
-    	attempts.configure(state = NORMAL)
-    	attempts.delete(0, END)
-    	txt2.set(str(count))
-    	attempts.configure(state = DISABLED)
+number_var = tk.StringVar()
+attempts_var = tk.StringVar()
 
-    	text.configure(state = NORMAL)
-    	text.delete("1.0", END)
-    	text.insert("1.0", random.choice(list2))  
-    	text.configure(state = DISABLED)
-    	    	
-    if n == randnum and n > 0 and n < 11:
-    	attempts.configure(state = NORMAL)
-    	attempts.delete(0, END)
-    	txt2.set(str(count))
-    	attempts.configure(state = DISABLED)
-    	R.configure(text = "Победа!")
-    	text.configure(state = NORMAL)
-    	text.delete("1.0", END)
-    	text.insert("1.0", random.choice(list3))
-    	text.configure(state = DISABLED)
-    	num.configure(state = "disabled")
-    	R.configure(state = DISABLED) 
-
-    if count == 0 and n != randnum:  	
-            R.configure(text = "Попытки кончились")
-            num.delete(0, END)
-            txt.set(str(randnum))
-            l3.configure(text = "Загаданное мной число:")
-            num.configure(state = "disabled")
-            text.configure(state = NORMAL)
-            text.delete("1.0", END)
-            text.insert("1.0", random.choice(list4))               
-            text.configure(state = DISABLED)
-            R.configure(state = DISABLED) 	  	
-#Графический дизайн 
-    	
-root = Tk()
-txt = StringVar()
-txt2 = StringVar()
-
-#Меню
-
-menubar = Menu(root)
-
-helpmenu = Menu(menubar, tearoff=0)
-
+menubar = tk.Menu(root)
+helpmenu = tk.Menu(menubar, tearoff=0)
 menubar.add_cascade(label="Справка", menu=helpmenu)
+menubar.add_command(label="Новая игра", command=restart_game)
+helpmenu.add_command(label="Инструкция", command=show_help)
+helpmenu.add_command(label="Правила игры", command=show_rules)
+root.config(menu=menubar)
 
-menubar.add_command(label = "Новая игра", command = restart)
+attempts_label = tk.Label(root, text="У тебя осталось попыток: ")
+attempts_label.grid(row=2, column=0, sticky=tk.NW, padx=10, pady=5)
 
-menubar.add_command(label = "Выйти", command = exit)
+guess_label = tk.Label(root, text="Думаю, ты загадал число:")
+guess_label.grid(row=3, column=0, sticky=tk.NW, padx=10, pady=5)
 
-helpmenu.add_command(label="Инструкция", command=how_to_use)
+message_text = tk.Text(width=35, height=3)
+message_text.grid(row=1, column=0, padx=10, pady=5, sticky=tk.NW)
+message_text.insert("1.0", random.choice(greeting_messages))
+message_text.config(state=tk.DISABLED)
 
-helpmenu.add_command(label= "Правила игры", command=game_rules)
+attempts_entry = tk.Entry(root, width=10, justify=tk.CENTER, textvariable=attempts_var)
+attempts_entry.config(disabledbackground="white", disabledforeground="black", state=tk.DISABLED)
+attempts_entry.grid(row=2, column=0, sticky=tk.NW, padx=230, pady=5)
+attempts_var.set(str(attempts_left))
 
-root.config(menu = menubar)
-
-#Текстовые надписи
-
-l1 = Label(root, text = "Угадай-ка!")
-l1.grid(row = 0, column = 0, padx = 270, pady = 7, sticky = NW)
-
-l2 = Label(root, text="У тебя осталось попыток: ") 
-l2.grid(row = 2, column = 0, sticky = NW, padx = 70, pady = 7)
-
-l3 = Label(root, text="Думаю, ты загадал число:")
-l3.grid(row = 3, column = 0, sticky = NW, padx = 70, pady = 7)
-
-#Текстовый виджет
-
-text = Text(width = 35, height = 3)
-text.grid(row = 1, column = 0, padx = 70,pady = 5, sticky = NW)
-text.insert("1.0", "Привет! Я загадал число от 1 до 10!\nПопробуешь угадать? :-)")
-text.configure(state = DISABLED)    	
-
-attempts = Entry(root, width = 10, justify = CENTER, textvariable=txt2)
-attempts.configure(disabledbackground="white", disabledforeground="black", state = DISABLED)
-attempts.grid(row = 2, column = 0, sticky = NW, padx = 460, pady = 7)
-txt2.set(str(count))
-
-#Поле ввода
-
-num = Entry(root, width = 10, justify = CENTER, textvariable=txt)
-num.grid(row = 3, column = 0, sticky = NW, padx = 460, pady = 7)
-num.configure(disabledbackground="white", disabledforeground="black")
-num.focus()
-
-#Кнопки
-
-R = Button(root, width = 20, text = "Играть", command = lambda: play())
-R.grid(row = 4, column = 0, sticky = NW, padx = 150, pady = 7)
+number_entry = tk.Entry(root, width=10, justify=tk.CENTER, textvariable=number_var)
+number_entry.grid(row=3, column=0, sticky=tk.NW, padx=230, pady=5)
+number_entry.configure(disabledbackground="white", disabledforeground="black")
+number_entry.focus()
+number_entry.bind('<Return>', on_enter)
 
 root.mainloop()
