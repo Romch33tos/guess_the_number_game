@@ -52,8 +52,8 @@ new_game_messages = [
 ]
 
 greeting_messages = [
-    'Привет! Я загадал число от 1 до 10!\nПопробуешь угадать? :-)',
-    'Привет! Сыграем в угадай-ку?\nЯ уже загадал число!',
+    'Привет! Я загадал число от 1 до 10!\nПопробуешь угадать? :)',
+    'Привет! Поиграем?\nЯ уже загадал число!',
     'Спорим, не угадаешь, какое число я задумал? :D'
 ]
 
@@ -169,7 +169,7 @@ def on_enter(event):
     play_game()
 
 root = ctk.CTk()
-root.title("Угадай-ка!")
+root.title("Угадай число!")
 root.geometry("340x150")
 root.resizable(width=False, height=False)
 
@@ -198,23 +198,23 @@ menu_bar.add_command(label="Новая игра", command=restart_game)
 
 root.configure(menu=menu_bar)
 
-attempts_label = ctk.CTkLabel(root, text="У тебя осталось попыток: ")
+attempts_label = ctk.CTkLabel(root, text="У тебя осталось попыток: ", font = ("Calibri", 16))
 attempts_label.grid(row=2, column=0, sticky="nw", padx=15, pady=5)
 
-guess_label = ctk.CTkLabel(root, text="Думаю, ты загадал число:")
+guess_label = ctk.CTkLabel(root, text="Думаю, ты загадал число:", font = ("Calibri", 16))
 guess_label.grid(row=3, column=0, sticky="nw", padx=15, pady=5)
 
-message_text = ctk.CTkTextbox(root, width=320, height=60, wrap="word")
+message_text = ctk.CTkTextbox(root, width=320, height=60, wrap="word", font = ("Calibri", 16))
 message_text.grid(row=1, column=0, padx=10, pady=5, sticky="nw")
 message_text.insert("1.0", random.choice(greeting_messages))
 message_text.configure(state="disabled")
 
-attempts_entry = ctk.CTkEntry(root, width=80, justify="center", textvariable=attempts_var)
+attempts_entry = ctk.CTkEntry(root, width=80, justify="center", textvariable=attempts_var, font = ("Calibri", 16))
 attempts_entry.configure(state="disabled")
 attempts_entry.grid(row=2, column=0, sticky="nw", padx=250, pady=5)
 attempts_var.set(str(attempts_left))
 
-number_entry = ctk.CTkEntry(root, width=80, justify="center", textvariable=number_var)
+number_entry = ctk.CTkEntry(root, width=80, justify="center", textvariable=number_var, font = ("Calibri", 16))
 number_entry.grid(row=3, column=0, sticky="nw", padx=250, pady=5)
 number_entry.focus()
 number_entry.bind('<Return>', on_enter)
